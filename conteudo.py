@@ -72,6 +72,7 @@ print(vard)
 #-----------------------------
 #Funções
 #-----------------------------
+
 def soma(x, y):
     resultado = x + y
     print(resultado)
@@ -131,6 +132,14 @@ def diff(a,**chaves): # Os argumentos são transformados em um dictionary - chav
 
 diff(a=10,b=20,c=30) #Na função diff isso será transformado 
 diff(a=13,b=24,c=36,d=56)
+
+########################
+#Funções
+########################
+#na definição de uma função podemos defini-la com quantidade variável de argumentos
+#Exemplo
+def diff(a,**chaves) #Esse **chaves diz que a variável chaves é um dicionário e pode ser passado um número indeterminado de argumentos
+def diff(a,*chaves) #Esse *chaves diz que a variável chaves é uma lista e pode ser passado um número indeterminado de argumentos
 
 #-----------------------------
 #Funções Lambda
@@ -471,7 +480,7 @@ try:
 except ValueError:
     print("O programa deu uma exceção de ValueError")
 
-except TypeError
+except TypeError:
     print("Você teve um TypeError")
 
 except Exception:
@@ -723,3 +732,17 @@ temperaturas = [25, 30, 35, 36, 12, 21, 41, 22, 36]
 
 sub_30 = lambda x: x < 30
 print(list(filter(sub_30, temperaturas)))
+
+##################################################
+# É comum ver algo do tipo:
+##################################################
+if __name__ == "__main__":
+    menu()
+
+# Isso é usado para o caso de se ter uma função solta ou algum código fora de função e ao se
+#importar esse arquivo, eu não saia executando tudo, já que ao se importar um código, tem-se acesso
+#a tudo que ele tem, o que não estiver isolado por função, acaba executando automaticamente se não 
+#tratado por essa condição: if __name__ == "__main__":
+#No caso acima, o menu() por exemplo só seria executado se executado do arquivo root de origem, 
+#ele não executa se ele for importando em outro código, pois vai cair nessa condição, e saberá que 
+#o arquivo chamando não é o __main__ que seria o arquivo de origem, conhecido pelo Python
