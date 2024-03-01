@@ -932,5 +932,5 @@ def deletar(chave,valor):
 # cadastrar("33986936874","Marcelo Lopes",37,"M","Hortolândia")
 # cadastrar("33333333333","Maria Lopes",27,"F","Campinas")
 # cadastrar("44444444444","Marcos Lopes",25,"M","Hortolândia")
-# print(consultar("cpf","333333333"))
-print(deletar("abc","33333333333"))
+# print(consultar("cpf","33333333333"))
+print(deletar("cpf","44444444444"))

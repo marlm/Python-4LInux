@@ -905,7 +905,7 @@ def cadastrar(cpf,nome,idade,sexo,cidade):
 def consultar(chave,valor):
     try:
         reg = False
-        with open(filename, 'r') as file:
+        with open(filename, 'r',newline='') as file:
             csv_reader = csv.reader(file, delimiter=";")
             if chave.lower() == "nome":
                 index = 1
@@ -924,30 +924,35 @@ def consultar(chave,valor):
         pass
 
 def deletar(chave,valor):
-    try:
-        with open(filename, 'r') as file:
-            csv_reader = csv.reader(file, delimiter=";")
-            conteudo = list(csv_reader) #Cria uma lista com o conteúdo do arquivo
+    remove = False
+    conteudo = []
+    new_conteudo = []
+    with open(filename, 'r') as file:
+        csv_reader = csv.reader(file, delimiter=";")
+        conteudo = list(csv_reader) #Cria uma lista com o conteúdo do arquivo
 
-            if chave.lower() == "nome":
-                index = 1
-            elif chave.lower() == "cpf":
-                index = 0
-            else:
-                return(f'Coluna inválida. Coluna "{chave}" não existe nessa base de dados')
+        if chave.lower() not in ["nome", "cpf"]:
+            return f'Coluna inválida. Coluna "{chave}" não é uma chave válida nessa base de dados'
         
-            for i in conteudo:
-                if i[index] == valor:
-                    conteudo.remove(i)
-                    return f"{i} removido do arquivo"
+        if chave.lower() == "nome":
+            col_index = 1
+        else:
+            col_index = 0
+
+        new_conteudo.append(conteudo[0])
+
+        for i in conteudo[1:]:
+            if len(i) > col_index:
+                if i[col_index] == valor:
+                    remove = True
                 else:
-                    return f"Conjunto {chave} = {valor}, não existe no arquivo"
+                    new_conteudo.append(i)
+        if not remove:
+            return f"Conjunto {chave} = {valor}, não existe no arquivo"
 
         with open(filename, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerows(conteudo)
-    except Exception:
-        pass
+            writer = csv.writer(file, delimiter=';')
+            writer.writerows(new_conteudo)
 
 def validar(info):
     for item in info:
@@ -970,13 +975,186 @@ def validar(info):
     return True
 
 # define_file()
-cadastrar("11111111111","Marcelo Lopes",37,"M","Hortolândia")
-cadastrar("22222222222","Maria Lopes",27,"F","Campinas")
-cadastrar("3333333333333","Marcos Lopes",25,"M","Hortolândia")
-cadastrar("44444444444","Marcos Lopes",25,"M","Hortolândia")
-cadastrar("55555555555","Marcos Lopes",25,"M","Hortolândia")
-cadastrar("6666666666666","Marcos Lopes",25,"M","Hortolândia")
+# print(cadastrar("11111111111","Marcelo Lopes",37,"M","Hortolândia"))
+# print(cadastrar("22222222222","Maria Lopes",27,"F","Campinas"))
+# print(cadastrar("33333333333","Marcos Lopes",25,"M","Hortolândia"))
+# print(cadastrar("44444444444","Marcosa Lopes",25,"M","Hortolândia"))
+# print(cadastrar("55555555555","Marcose Lopes",25,"M","Hortolândia"))
+# print(cadastrar("66666666666","Marcolino Lopes",25,"M","Hortolândia"))
+# print(cadastrar("77777777777","Marilene Lopes",25,"M","Hortolândia"))
 # print(cadastrar("77777777777","Noah Moraes","4","M","Oslo"))
-# print(cadastrar("777777777778","Noah Moraes","4","M","Oslo"))
-# print(consultar("cpf","77777777777"))
-# print(deletar("cpf","33333333333"))
+# print(cadastrar("777777777778","Noah Lopes","4","M","Oslo"))
+# print(consultar("cpf","44444444444"))
+print(deletar("nome","Marcos Lopes"))
+print(deletar("nome","Marcolino Lopes"))
+print(deletar("cpf","77777777777"))
+
+
+
+########################################################################################################################
+# ====================================================================================
+# 1) Escreva um programa utilizando funções que realize um cadastro.
+# Deverão ser coletadas as seguintes informações:
+
+# CPF
+# Nome
+# Idade
+# Sexo
+# Cidade
+
+# Os registros deverão ser armazenados em um arquivo CSV.
+# Para manter o padrão brasileiro, o CSV será separado pelo caractere ";".
+# O programa deverá possuir uma função de consulta e de exclusão (POR NOME OU CPF).
+# O programa deverá possuir tratamentos de erro, com a finalidade de que o programa nunca
+# dê uma exceção e também que ele não aceite dados incorretos em nenhum momento.
+
+# 1: Importar os modulos a serem usados.
+# 2: Criamos uma função para o menu principal do programa.
+# 3: Criar uma função para coletar as informações do cliente.
+# 4: Criar uma função para validar as informações passadas pelo cliente.
+# 5: Criar uma função para adicionar essas informações em um arquivo CSV.
+# 6: Criar uma função para consultar o arquivo CSV.
+# 7: Criar uma função para remover entradas do arquivo CSV.
+
+# import csv, os
+
+# def menu():
+#     while True:
+#         opcao = input("""O que deseja fazer? 
+#                       1 - Consultar um valor no banco.
+#                       2 - Cadastrar um valor no banco.
+#                       3 - Remover um valor do banco.
+#                       4 - Parar o programa.\n\n""")
+        
+#         os.system("cls" if os.name == "nt" else "clear")
+
+#         if opcao == "4":
+#             print("Parando o programa...")
+#             break
+
+#         elif opcao == "3":
+#             exclusao()
+
+#         elif opcao == "2":
+#             cadastro()
+
+#         elif opcao == "1":
+#             consulta()
+
+#         else:
+#             print("Voce inseriu um valor inválido.\n")
+
+# def cadastro():
+
+#     while True:
+#         cpf = input("Qual o CPF dessa pessoa? ")
+#         if validacao("cpf", cpf) == False:
+#             continue
+
+#         nome = input("Qual é o nome da pessoa? ")
+
+#         idade = input("Qual a idade da pessoa? ")
+#         if validacao("idade", idade) == False:
+#             continue
+
+#         sexo = input("Qual o sexo da pessoa? [M/F/O]: ")
+#         if validacao("sexo", sexo) == False:
+#             continue
+
+#         cidade = input("Qual a cidade onde essa pessoa reside? ")
+
+#         dados_a_cadastrar = [cpf, nome, idade, sexo, cidade]
+        
+#         with open("banco.csv", "a", newline="") as arquivo:
+#             conteudo = csv.writer(arquivo, delimiter=";")
+#             conteudo.writerow(dados_a_cadastrar)
+
+#         resposta = input("\nDeseja adicionar outro valor? [S/N]: ")
+#         if resposta.upper() == "N":
+#             break
+
+#         os.system("cls" if os.name == "nt" else "clear")
+
+# def validacao(teste, valor):
+#     match teste:
+
+#         case "cpf":
+#             cpf = valor.replace(".", "").replace("-", "").strip()
+#             if len(cpf) == 11 and cpf.isnumeric() == True:
+#                 return True
+#             else:
+#                 print("CPF inválido, digite novamente.")
+#                 return False
+
+#         case "sexo":
+#             sexo = valor.upper().strip()
+#             if sexo in "MFO":
+#                 return True
+#             else:
+#                 print("Sexo inválido, digite novamente.")
+#                 return False
+
+#         case "idade":
+#             idade = valor.strip()
+#             if idade.isnumeric() == True:
+#                 if int(idade) < 130:
+#                     return True
+#             else:
+#                 print("Idade inválida, digite novamente.")
+#                 return False
+
+#         case _:
+#             pass
+
+# def consulta():
+#     while True:
+#         resposta = input("""Por qual valor deseja consultar?
+#                          0 - CPF
+#                          1 - Nome\n\n""")
+#         if resposta in "01":
+#             resposta = int(resposta)
+#             break
+#         print("Opção inválida")
+
+#     while True:
+#         cpf_nome = input("Digite o nome ou cpf a consultar: ")
+#         if resposta == 0:
+#             if validacao("cpf", cpf_nome) == False:
+#                 continue
+#         break
+
+#     with open("banco.csv", "r") as arquivo:
+#         conteudo = csv.reader(arquivo, delimiter=";")
+#         valor_encontrado = False
+
+#         for linha in conteudo:
+#             if linha[resposta] == cpf_nome:
+#                 print(f"""Cadastro encontrado:
+# CPF: {linha[0]}
+# NOME: {linha[1]}
+# IDADE: {linha[2]}
+# SEXO: {linha[3]}
+# CIDADE: {linha[4]}
+# """)
+#                 valor_encontrado = True
+#                 break
+
+#         if valor_encontrado == False:
+#             print("Valor não encontrado")
+
+# def exclusao():
+#     cpf_nome = input("Digite o nome ou cpf da pessoa a excluir: ")
+
+#     with open("banco.csv", "r") as arquivo_inicial, open("banco_editado.csv", "a", newline="") as arquivo_editado:
+#         writer = csv.writer(arquivo_editado, delimiter=";")
+#         reader = csv.reader(arquivo_inicial, delimiter=";")
+
+#         for linha in reader:
+#             if linha[0] != cpf_nome and linha[1] != cpf_nome:
+#                 writer.writerow(linha)
+        
+#     os.remove("banco.csv")
+#     os.rename("banco_editado.csv", "banco.csv")
+
+# if __name__ == "__main__":
+#     menu()
